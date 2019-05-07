@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+
+import { Provider } from 'react-redux';
 //===============================
 
 // STATE
@@ -17,7 +19,9 @@ const VISIBILITY_CAUGHT = 'caught';
 const VISIBILITY_UNCAUGHT='uncaught';
 
 const initialState = {
-    ...initialCards,
+    // spreads the "cards": [...] into this spot in initialState
+    // it is the equivalent of ...initialCards
+    ...initialCards, 
     visibilityFilter: VISIBILITY_ALL
 };
 
@@ -113,6 +117,7 @@ function visbility(state=initialState.visibilityFilter,action={type:''}){
     }
 }
 
+// Assigns responcibility of one piece of state to one reducer
 const rootReducer = combineReducers({
     cards: cards,
     visibilityFilter: visbility,
@@ -124,9 +129,13 @@ const store = createStore(rootReducer);
 window.store=store;
 
 
+//no need to import redux store becuause ReactDom is wrapped by `Provider`
 
-
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store}>
+    <App />
+    </Provider>,
+    document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
